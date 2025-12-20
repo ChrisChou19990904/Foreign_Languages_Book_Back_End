@@ -1,0 +1,14 @@
+server:
+port: 8080
+spring:
+datasource:
+url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bookstore}
+username: ${DB_USER:postgres}
+password: ${DB_PASS:password}
+jpa:
+hibernate:
+ddl-auto: update
+show-sql: true
+jwt:
+secret: verysecretchangeme
+expiration-ms: 3600000
