@@ -245,12 +245,24 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("訂單 ID: " + orderId + " 未找到"));
 
-        OrderStatus nextStatus = OrderStatus.valueOf(newStatus);
+        // 🌟 修正點 1: 加上 .toUpperCase() 並處理空格，防止前端小寫造成的 400 錯誤
+        OrderStatus nextStatus;
+        try {
+            nextStatus = OrderStatus.valueOf(newStatus.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("不支援的訂單狀態: " + newStatus);
+        }
 
-        // 🌟 核心邏輯：取消時回補庫存
+        // 🌟 修正點 2: 庫存回補邏輯
         if (nextStatus == OrderStatus.CANCELLED && order.getStatus() != OrderStatus.CANCELLED) {
             restoreStock(order);
         }
+
+        // 🌟 修正點 3: 調整取消限制 (如果你希望管理員擁有最高權限強行取消，請移除或註解掉這段)
+     if (nextStatus == OrderStatus.CANCELLED && order.getStatus() == OrderStatus.PAID) {
+        // 如果是期末專案為了方便演示，建議把這個限制拿掉，或者讓管理員可以取消
+    }
+
 
         order.setStatus(nextStatus);
         orderRepository.save(order);
