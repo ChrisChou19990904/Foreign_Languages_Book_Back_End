@@ -23,7 +23,7 @@ public class ReviewService {
     private final UserRepository userRepository;
 
     // ReviewService.java
-
+    @Transactional(readOnly = true)
     public List<ReviewResponse> getReviewsByBookId(Integer bookId) {
         // 1. 從資料庫抓出 Entity 列表
         List<Review> reviews = reviewRepository.findByBook_BookIdOrderByCreatedAtDesc(bookId);
