@@ -6,6 +6,7 @@ public enum Language {
     KOREAN("韓語"),
     FRENCH("法語"),
     SPANISH("西班牙語"),
+    PORTUGUESE("葡萄牙語"),
     GERMAN("德語"),
     ITALIAN("義大利語"),
     RUSSIAN("俄羅斯語"),
