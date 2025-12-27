@@ -188,4 +188,24 @@ public class UserService {
             throw new RuntimeException("無效的角色名稱: " + newRoleName);
         }
     }
+    // 在 UserService.java 中加入
+    @Transactional
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("用戶不存在"));
+
+        // 1. 驗證舊密碼是否正確 (注意：密碼是加密存儲的，必須用 encoder.matches)
+        if (!encoder.matches(oldPassword, user.getPasswordHash())) {
+            throw new RuntimeException("舊密碼輸入錯誤，請重新確認。");
+        }
+
+        // 2. 檢查新密碼是否與舊密碼相同 (選配，但對安全性有幫助)
+        if (oldPassword.equals(newPassword)) {
+            throw new RuntimeException("新密碼不能與舊密碼相同。");
+        }
+
+        // 3. 加密並更新新密碼
+        user.setPassword(encoder.encode(newPassword));
+        userRepo.save(user);
+    }
 }

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.dto.ChangePasswordRequest;
 import org.example.dto.ProfileDto;
 import org.example.dto.UserProfileResponse; // <-- 必須導入
 import org.example.service.UserService;
@@ -54,6 +55,20 @@ public class UserController {
             return ResponseEntity.ok("會員資料更新成功");
         } catch (RuntimeException e) {
             // 返回 400 Bad Request 和錯誤訊息
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    // 在 UserController.java 中加入
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+            Principal principal,
+            @RequestBody ChangePasswordRequest req
+    ) {
+        try {
+            userService.changePassword(principal.getName(), req.getOldPassword(), req.getNewPassword());
+            return ResponseEntity.ok("密碼修改成功，下次登入請使用新密碼。");
+        } catch (RuntimeException e) {
+            // 如果舊密碼錯了，會跳到這裡並回傳 400 給前端
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
