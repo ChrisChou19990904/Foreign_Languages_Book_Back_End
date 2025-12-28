@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails; // 引入 User
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import
 // ⚠️ 這裡需要定義一個 Role 枚舉類 (例如 Role.USER, Role.ADMIN)
 
 @Data
