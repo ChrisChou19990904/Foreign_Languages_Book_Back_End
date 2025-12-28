@@ -40,7 +40,10 @@ public class UserService {
         user.setPassword(encoder.encode(req.getPassword()));
         // 強制所有前台註冊者角色為 MEMBER
         user.setRole(Role.USER);
+        user.setIsActive(true); // 確保狀態是啟用的
 
+        // 🎯 這裡！手動塞入當前時間，不靠資料庫自動生成
+        user.setCreatedAt(java.time.LocalDateTime.now());
         return userRepo.save(user);
     }
 
