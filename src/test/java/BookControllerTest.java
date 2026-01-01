@@ -1,3 +1,5 @@
+package org.example; // 1. 確保 Package 路徑包含 org.example
+
 import org.example.controller.BookController;
 import org.example.entity.Book;
 import org.example.service.BookService;
@@ -6,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
+import org.example.service.JwtService;         // 🌟 新增
+import org.example.repository.UserRepository;   // 🌟 新增
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,8 +28,14 @@ class BookControllerTest {
 
     @MockBean
     private BookService bookService;
+    // 🌟 必須補上這兩個 MockBean，否則啟動時 JwtAuthenticationFilter 會找不到依賴
+    @MockBean
+    private JwtService jwtService;
 
+    @MockBean
+    private UserRepository userRepository;
     @Test
+    @WithMockUser
     @DisplayName("🧪 前台測試：根據語言查詢書籍應回傳 200 與資料內容")
     void shouldReturnBooksByLanguage() throws Exception {
         // 準備模擬資料

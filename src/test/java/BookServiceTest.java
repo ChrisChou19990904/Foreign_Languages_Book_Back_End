@@ -1,3 +1,5 @@
+package org.example; // 1. 確保 Package 路徑包含 org.example
+
 import org.example.dto.BookRequest;
 import org.example.repository.BookRepository;
 import org.example.service.BookService;
