@@ -60,9 +60,14 @@ public class JwtService {
     // 驗證 Token 是否有效
 // 🎯 修復：將參數型別從 User 改為 Spring Security 的 UserDetails 介面
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        // 注意：UserDetails 介面使用 getUsername()，我們知道它返回的是 Email
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try {
+            final String username = extractUsername(token);
+            // 這裡檢查名字是否匹配，且沒有過期
+            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        } catch (Exception e) {
+            // 🌟 關鍵：如果解析過程噴出任何異常（如過期、簽名錯誤），代表 Token 無效
+            return false;
+        }
     }
 
     // 檢查 Token 是否過期
@@ -76,8 +81,14 @@ public class JwtService {
 
     // 輔助方法：提取 Claim
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (Exception e) {
+            // 如果在提取過程中出錯（例如 Token 已過期導致 extractAllClaims 崩潰）
+            // 拋出一個自定義或原有的異常，或者讓上層處理
+            throw e;
+        }
     }
 
     private Claims extractAllClaims(String token) {

@@ -137,7 +137,7 @@ class ReviewServiceTest {
     // ==========================================
 
     @Test
-    @DisplayName("查詢評論成功：應正確轉換 DTO 並包含用戶名")
+    @DisplayName("查詢評論成功：應正確轉換 DTO 並包含用戶電郵")
     void testGetReviewsByBookId_Success() {
         // Arrange
         Review review = new Review();
@@ -156,7 +156,7 @@ class ReviewServiceTest {
         // Assert
         assertNotNull(responses);
         assertEquals(1, responses.size());
-        assertEquals("Test User", responses.get(0).getUsername()); // 驗證有抓到名字
+        assertEquals("test@example.com", responses.get(0).getUsername()); // 驗證有抓到名字
         assertEquals(4, responses.get(0).getRating());
     }
 
