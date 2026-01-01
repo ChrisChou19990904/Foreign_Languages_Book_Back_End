@@ -13,7 +13,7 @@ public class AdminInitializer {
 
     // 專案啟動時，檢查是否已存在 admin@test.com 帳號，若無則建立
     @Bean
-    CommandLineRunner initAdmin(UserRepository repo, PasswordEncoder encoder) {
+    public CommandLineRunner initAdmin(UserRepository repo, PasswordEncoder encoder) {
         return args -> {
             final String adminEmail = "admin@test.com";
 
