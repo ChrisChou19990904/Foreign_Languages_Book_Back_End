@@ -7,6 +7,7 @@ import org.example.repository.BookRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,7 @@ public class BookService {
 
     @Transactional
     public Book createBook(BookRequest request) {
+
         if (bookRepository.existsByIsbn(request.getIsbn())) {
             throw new RuntimeException("ISBN 國際標準書號已存在");
         }
