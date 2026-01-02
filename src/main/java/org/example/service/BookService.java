@@ -60,7 +60,15 @@ public class BookService {
 
     @Transactional
     public Book createBook(BookRequest request) {
+        // 1. 價格驗證
+        if (request.getPrice() != null && request.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("價格不可為負數");
+        }
 
+        // 2. 標題驗證
+        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+            throw new RuntimeException("書籍標題不可為空白");
+        }
         if (bookRepository.existsByIsbn(request.getIsbn())) {
             throw new RuntimeException("ISBN 國際標準書號已存在");
         }
